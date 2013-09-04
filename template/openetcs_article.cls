@@ -1,4 +1,4 @@
-%% This is openetcs.cls
+%% This is openetcs_article.cls
 %% A LaTeX class based on:
 
 
@@ -9,7 +9,7 @@
 
 %
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{openetcs}
+\ProvidesClass{template/openetcs_article}
 [2012/10/11 v0.1 Typesetting Technical Information Article of
 openETCS project ]
 %% David Mentres FIXME macro
@@ -21,7 +21,7 @@ openETCS project ]
 \LoadClass[11pt,twoside]{article}
 \RequirePackage{graphicx,color,caption,longtable}
 \RequirePackage{dcolumn}
-\RequirePackage{natbib}
+\RequirePackage[numbers]{natbib}
 \renewcommand{\bibfont}{\fontsize{10pt}{12pt}\selectfont}
 \setlength{\bibhang}{0.5in}
 \setlength{\bibsep}{12pt}
