@@ -78,6 +78,134 @@ Version & Section & Modification / Description & Author \\\hline}
 
 % The actual document starts below this line
 %=============================
+\section{Introduction}
+
+ERSA will provide a first implementation of a baseline 3 EVC kernel. This kernel will be accessed through an interface that will be described in this document. As the kernel is a strict subset 26 implementation, this document will not cover specific and proprietary components. 
+
+\section{Architecture}
+	\subsection{Global view}
+	\subsection{Interface Layer}
+\section{EVC and sub-systems interface}
+	\subsection{Maintenance}
+	\subsection{Odometer}
+	\subsection{Train Interface Unit - Brake Interface Unit}
+		Train interface unit and brake interface unit functions are described in the subset 34, specifically in the chapter 2.8 
+		\subsubsection{Input functions}
+		\begin{itemize}
+			\item read\_SLEEPING()
+				\subitem subset 34 - §2.2.1, subset 26 - §4.4.6 / §4.6.3
+			\item read\_PASSIVE\_SHUNTING()
+				\subitem subset 34 - §2.2.2, subset 26 - §4.4.20 / §4.6.3
+			\item read\_NON-LEADING()
+				\subitem subset 34 - §2.2.3, subset 26 - §4.4.15 / §4.6.3
+			\item read\_BRAKE\_PRESSURE()
+				\subitem subset 34 - §2.3.2, subset 26 - §3.13.2.2.7 / §A.3.10
+			\item read\_SPECIAL\_BRAKE\_STATUS()
+				\subitem subset 34 - §2.3.6, subset 26 - §3.13
+			\item read\_ADDITIONAL\_BRAKE\_STATUS()
+				\subitem subset 34 - §2.3.7, subset 26 - §3.13
+			\item read\_CAB\_STATUS()
+				\subitem subset 34 - §2.5.1, subset 26 - §4.6.3, subset 35 - §5.2.4.4
+			\item read\_DIRECTION\_CONTROLLER()
+				\subitem subset 34 - §2.5.2, subset 26 - §3.14.2 / 5.13.1.4, subset 35 - §5.2.4.4
+			\item read\_TRAIN\_INTEGRITY()
+				\subitem subset 34 - §2.5.3, subset 26 - §3.6.5.2.1
+			\item read\_TRAIN\_DATA\_INFORMATION()
+				\subitem subset 34 - §2.6.2, subset 26 - §3.18.3 / §5.17
+			\item read\_TYPE\_OF\_TRAIN\_DATA\_ENTRY()
+				\subitem subset 34 - §2.6.1, ERA\_ERTMS\_015560 - §10.3.9.6
+			\item read\_TRACTION\_STATUS()
+				\subitem subset 34 - §2.5.4, subset 35 - §5.2.4.4
+			\item read\_NATIONAL\_SYSTEM\_ISOLATION()
+				\subitem subset 34 - §2.7, subset 35 - §10.3.3.5 / §10.3.3.6 / §10.14.1.2
+		\end{itemize}
+	\subsubsection{Output functions}
+		\begin{itemize}
+			\item write\_ISOLATION()
+				\subitem subset 34 - §2.2.4, subset 26 - §4.4.3.1.1
+			\item write\_SERVICE\_BRAKE\_COMMAND()
+				\subitem subset 34 - §2.3.1, subset 26 - §3.13.2.2.7, subset 35 - §5.2.5
+			\item write\_EMERGENCY\_BRAKE\_COMMAND()
+				\subitem subset 34 - §2.3.3, subset 26 - §3.13.10 / §3.14.1 / §4.4.4 / §4.4.5 / §4.4.13, subset 35 - §5.2.5
+			\item write\_SPECIAL\_BRAKE\_INHIBIT()
+				\subitem subset 34 - §2.3.4, subset 26 - §3.12.1, subset 35 - §5.2.4.3, subset 35 - §5.2.4.3
+			\item write\_CHANGE OF\_TRACTION\_SYSTEM()
+				\subitem subset 34 - §2.4.1, subset 26 - §3.12.1
+			\item write\_PANTOGRAPH()
+				\subitem subset 34 - §2.4.2, subset 26 - §3.12.1, subset 35 - §5.2.4.3
+			\item write\_AIR\_TIGHTNESS()
+				\subitem subset 34 - §2.4.4, subset 26 - §3.12.1, subset 35 - §5.2.4.3
+			\item write\_PASSENGER\_DOOR()
+				\subitem subset 34 - §2.4.6, subset 26 - §3.12.1
+			\item write\_MAIN\_POWER\_SWITCH()
+				\subitem subset 34 - §2.4.7, subset 26 - §3.12.1, subset 35 - §5.2.4.3
+			\item write\_TRACTION\_CUT\_OFF()
+				\subitem subset 34 - §2.4.9, subset 26 - §3.13.2.2.8, subset 35 - §5.2.4.3
+			\item write\_CHANGE\_OF\_ALLOWED\_CURRENT\_CONSUMPTION()
+				\subitem subset 34 - §2.4.10, subset 26 - §3.12.1		
+		\end{itemize}
+	\subsection{BTM}
+	\subsection{LTM}
+	\subsection{EURORADIO}
+	\subsection{STM}
+	\subsection{DMI}
+	\subsection{Juridical Recording Information}
+		\subsubsection{References}
+			The communication to this sub-system is unidirectional: EVC sends "message" to the JRI sub-systems as defined in subset 27 in article 4.2.1.
+		\subsubsection{Input functions}
+			According to SRS, there are no data sent from the JRI sub-system to the EVC, however we can imagine that some sort of diagnostic/maintenance message may be needed
+		\subsubsection{Output functions}
+			There will be a write\_XXX function for each kind of message. Parameters of the functions must be set accordantly with the 4.2.1 article from subset 27 
+			\begin{itemize}
+				\item write\_GENERAL\_MESSAGE()
+				\item write\_TRAIN\_DATA()
+				\item write\_EMERGENCY\_BRAKE\_COMMAND\_STATE()
+				\item write\_SERVICE\_BRAKE\_COMMAND\_STATE()
+				\item write\_MESSAGE\_TO\_RADIO\_INFILL\_UNIT()
+				\item write\_TELEGRAM\_FROM\_BALISE()
+				\item write\_MESSAGE\_FROM\_EUROLOOP()
+				\item write\_MESSAGE\_FROM\_RADIO\_INFILL\_UNIT()
+				\item write\_MESSAGE\_FROM\_RBC()
+				\item write\_MESSAGE\_TO\_RBC()
+				\item write\_DRIVERS\_ACTIONS()
+				\item write\_BALISE\_GROUP\_ERROR()
+				\item write\_RADIO\_ERROR()
+				\item write\_STM\_INFORMATION()
+				\item write\_INFORMATION\_FROM\_COLD\_MOVEMENT\_DETECTOR()
+				\item write\_START\_DISPLAYING\_FIXED\_TEXT\_MESSAGE()
+				\item write\_STOP\_DISPLAYING\_FIXED\_TEXT\_MESSAGE()
+				\item write\_START\_DISPLAYING\_PLAIN\_TEXT\_MESSAGE()
+				\item write\_STOP\_DISPLAYING\_PLAIN\_TEXT\_MESSAGE()
+				\item write\_SPEED\_AND\_DISTANCE\_MONITORING\_INFORMATION()
+				\item write\_DMI\_SYMBOL\_STATUS()
+				\item write\_DMI\_SOUND\_STATUS()
+				\item write\_DMI\_SYSTEM\_STATUS\_MESSAGE()
+				\item write\_ADDITIONAL\_DATA()
+				\item write\_SR\_SPEED/DISTANCE\_ENTERED\_BY\_THE\_DRIVER()
+				\item write\_NTC\_SELECTED()
+				\item write\_SAFETY\_CRITICAL\_FAULT\_IN\_MODE\_SL,\_NL\_OR\_PS()
+				\item write\_VIRTUAL\_BALISE\_COVER\_SET\_BY\_THE\_DRIVER()
+				\item write\_VIRTUAL\_BALISE\_COVER\_REMOVED\_BY\_THE\_DRIVER()
+				\item write\_SLEEPING\_INPUT()
+				\item write\_PASSIVE\_SHUNTING\_INPUT()
+				\item write\_NON\_LEADING\_INPUT()
+				\item write\_REGENERATIVE\_BRAKE\_STATUS()
+				\item write\_MAGNETIC\_SHOE\_BRAKE\_STATUS()
+				\item write\_EDDY\_CURRENT\_BRAKE\_STATUS()
+				\item write\_ELECTRO\_PNEUMATIC\_BRAKE\_STATUS()
+				\item write\_ADDITIONAL\_BRAKE\_STATUS()
+				\item write\_CAB\_STATUS()
+				\item write\_DIRECTION\_CONTROLLER\_POSITION()
+				\item write\_TRACTION\_STATUS()
+				\item write\_TYPE\_OF\_TRAIN\_DATA()
+				\item write\_NATIONAL\_SYSTEM\_ISOLATION()
+				\item write\_TRACTION\_CUT\_OFF\_COMMAND\_STATE()
+				\item write\_ETCS\_ON-BOARD\_PROPRIETARY\_JURIDICAL\_DATA()
+			\end{itemize}
+
+
+
+
 
 
 
