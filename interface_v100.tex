@@ -80,134 +80,373 @@ Version & Section & Modification / Description & Author \\\hline}
 %=============================
 \section{Introduction}
 
-ERSA will provide a first implementation of a baseline 3 EVC kernel. This kernel will be accessed through an interface that will be described in this document. As the kernel is a strict subset 26 implementation, this document will not cover specific and proprietary components. 
+This document will describe the external interface between the baseline 3 implementation of an EVC provided by ERSA and the On-Board sub-systems proprietary interface.
 
-\section{Architecture}
-	\subsection{Global view}
-	\subsection{Interface Layer}
-\section{EVC and sub-systems interface}
-	\subsection{Maintenance}
-	\subsection{Odometer}
-	\subsection{Train Interface Unit - Brake Interface Unit}
-		Train interface unit and brake interface unit functions are described in the subset 34, specifically in the chapter 2.8 
-		\subsubsection{Input functions}
+As the kernel is a strict subset 26 implementation, this document will not cover specific proprietary components such as Odometer, Train Interface Unit, Balise Transmission Module, Loop Transmission Module, Specific Transmission Module, EURORADIO or Juridical recording unit.
+
+The document will be spitted across modules 
+
+\section{Maintenance}
+	\subsection{Exchanged data}
+		While not explicitly referenced in the SRS, for each sub-system interface, the EVC should have one output function that allows the initialization of the sub-system and a input function to control the status.
+	\subsection{Input functions}
 		\begin{itemize}
-			\item read\_SLEEPING()
+			\item read\_xxx\_status()
+				\subitem "xxx" can be "tui", "btm", "dmi", ...
+		\end{itemize}
+	\subsection{output functions}
+		\begin{itemize}
+			\item write\_xxx\_maintenance\_data()
+				\subitem "xxx" can be "tui", "btm", "dmi", ...
+		\end{itemize}
+\section{Odometer}
+	\subsection{Exchanged data}
+		Some references can be found in subset 35 - §12.
+		
+		The input data shall include:
+		\begin{itemize}
+			\item Time
+			\item Direction
+			\item Position
+			\item Position accuracy
+			\item Speed
+			\item Speed accuracy
+			\item Acceleration
+		\end{itemize}
+		
+		The EVC shall also send calibration data back to the Odometer sub-system.		
+	\subsection{Input functions}
+		\begin{itemize}
+			\item read\_odo\_data
+		\end{itemize}
+	\subsection{output functions}
+		\begin{itemize}
+			\item  write\_odo\_calibration()
+		\end{itemize}
+\section{Train Interface Unit - Brake Interface Unit}
+	\subsection{Exchanged data}
+		TIU and BIU functions are described in the subset 34.
+			
+		The data read by the EVC shall include:
+		\begin{itemize}
+			\item ETCS Main Switch status
+			\item Cab status
+			\item Direction controller
+			\item Train Integrity status
+			\item Sleeping
+			\item Non Leading
+			\item Passive Shunting
+			\item Regenerative Brake status
+			\item Magnetic Shoe Brake status
+			\item Eddy Current Brake status
+			\item Electro Pneumatic (EP) status
+			\item Additional brake status
+			\item Train data information
+			\item Type of train data entry
+			\item Traction status
+			\item National System Isolation status
+			\item Brake pressure
+		\end{itemize}
+		
+		The command sent by the EVC shall include:
+		\begin{itemize}
+			\item Service Brake command
+			\item Emergency Brake command
+			\item Traction Cut-Off command
+			\item Regenerative Brake inhibition
+			\item Magnetic Shoe Brake inhibition
+			\item Eddy Current Brake for SB inhibition
+			\item Eddy Current Brake for EB inhibition
+			\item Change of traction system
+			\item Pantograph command
+			\item Air Tightness command
+			\item Main Power Switch command
+			\item Isolation 
+			\item Passenger door
+			\item Allowed current consumption				
+		\end{itemize}						
+	\subsection{Input functions}
+		\begin{itemize}
+			\item read\_tui\_sleeping()
 				\subitem subset 34 - §2.2.1, subset 26 - §4.4.6 / §4.6.3
-			\item read\_PASSIVE\_SHUNTING()
+			\item read\_tui\_passive\_shunting()
 				\subitem subset 34 - §2.2.2, subset 26 - §4.4.20 / §4.6.3
-			\item read\_NON-LEADING()
+			\item read\_tui\_non-leading()
 				\subitem subset 34 - §2.2.3, subset 26 - §4.4.15 / §4.6.3
-			\item read\_BRAKE\_PRESSURE()
-				\subitem subset 34 - §2.3.2, subset 26 - §3.13.2.2.7 / §A.3.10
-			\item read\_SPECIAL\_BRAKE\_STATUS()
+			\item read\_bui\_brake\_pressure()
+				\subitem subset 34 - §2.3.2, subset 26 - §3.13.2.2.7 / §a.3.10
+			\item read\_bui\_special\_brake\_status()
 				\subitem subset 34 - §2.3.6, subset 26 - §3.13
-			\item read\_ADDITIONAL\_BRAKE\_STATUS()
+			\item read\_bui\_additional\_brake\_status()
 				\subitem subset 34 - §2.3.7, subset 26 - §3.13
-			\item read\_CAB\_STATUS()
+			\item read\_tui\_cab\_status()
 				\subitem subset 34 - §2.5.1, subset 26 - §4.6.3, subset 35 - §5.2.4.4
-			\item read\_DIRECTION\_CONTROLLER()
+			\item read\_tui\_direction\_controller()
 				\subitem subset 34 - §2.5.2, subset 26 - §3.14.2 / 5.13.1.4, subset 35 - §5.2.4.4
-			\item read\_TRAIN\_INTEGRITY()
+			\item read\_tui\_train\_integrity()
 				\subitem subset 34 - §2.5.3, subset 26 - §3.6.5.2.1
-			\item read\_TRAIN\_DATA\_INFORMATION()
+			\item read\_tui\_train\_data\_information()
 				\subitem subset 34 - §2.6.2, subset 26 - §3.18.3 / §5.17
-			\item read\_TYPE\_OF\_TRAIN\_DATA\_ENTRY()
-				\subitem subset 34 - §2.6.1, ERA\_ERTMS\_015560 - §10.3.9.6
-			\item read\_TRACTION\_STATUS()
+			\item read\_tui\_type\_of\_train\_data\_entry()
+				\subitem subset 34 - §2.6.1, era\_ertms\_015560 - §10.3.9.6
+			\item read\_tui\_traction\_status()
 				\subitem subset 34 - §2.5.4, subset 35 - §5.2.4.4
-			\item read\_NATIONAL\_SYSTEM\_ISOLATION()
+			\item read\_tui\_national\_system\_isolation()
 				\subitem subset 34 - §2.7, subset 35 - §10.3.3.5 / §10.3.3.6 / §10.14.1.2
 		\end{itemize}
-	\subsubsection{Output functions}
+	\subsection{Output functions}
 		\begin{itemize}
-			\item write\_ISOLATION()
+			\item write\_tui\_isolation()
 				\subitem subset 34 - §2.2.4, subset 26 - §4.4.3.1.1
-			\item write\_SERVICE\_BRAKE\_COMMAND()
+			\item write\_bui\_service\_brake\_command()
 				\subitem subset 34 - §2.3.1, subset 26 - §3.13.2.2.7, subset 35 - §5.2.5
-			\item write\_EMERGENCY\_BRAKE\_COMMAND()
+			\item write\_bui\_emergency\_brake\_command()
 				\subitem subset 34 - §2.3.3, subset 26 - §3.13.10 / §3.14.1 / §4.4.4 / §4.4.5 / §4.4.13, subset 35 - §5.2.5
-			\item write\_SPECIAL\_BRAKE\_INHIBIT()
+			\item write\_bui\_special\_brake\_inhibit()
 				\subitem subset 34 - §2.3.4, subset 26 - §3.12.1, subset 35 - §5.2.4.3, subset 35 - §5.2.4.3
-			\item write\_CHANGE OF\_TRACTION\_SYSTEM()
+			\item write\_tui\_change of\_traction\_system()
 				\subitem subset 34 - §2.4.1, subset 26 - §3.12.1
-			\item write\_PANTOGRAPH()
+			\item write\_tui\_pantograph()
 				\subitem subset 34 - §2.4.2, subset 26 - §3.12.1, subset 35 - §5.2.4.3
-			\item write\_AIR\_TIGHTNESS()
+			\item write\_tui\_air\_tightness()
 				\subitem subset 34 - §2.4.4, subset 26 - §3.12.1, subset 35 - §5.2.4.3
-			\item write\_PASSENGER\_DOOR()
+			\item write\_tui\_passenger\_door()
 				\subitem subset 34 - §2.4.6, subset 26 - §3.12.1
-			\item write\_MAIN\_POWER\_SWITCH()
+			\item write\_tui\_main\_power\_switch()
 				\subitem subset 34 - §2.4.7, subset 26 - §3.12.1, subset 35 - §5.2.4.3
-			\item write\_TRACTION\_CUT\_OFF()
+			\item write\_tui\_traction\_cut\_off()
 				\subitem subset 34 - §2.4.9, subset 26 - §3.13.2.2.8, subset 35 - §5.2.4.3
-			\item write\_CHANGE\_OF\_ALLOWED\_CURRENT\_CONSUMPTION()
+			\item write\_tui\_change\_of\_allowed\_current\_consumption()
 				\subitem subset 34 - §2.4.10, subset 26 - §3.12.1		
 		\end{itemize}
-	\subsection{BTM}
-	\subsection{LTM}
-	\subsection{EURORADIO}
-	\subsection{STM}
-	\subsection{DMI}
-	\subsection{Juridical Recording Information}
-		\subsubsection{References}
-			The communication to this sub-system is unidirectional: EVC sends "message" to the JRI sub-systems as defined in subset 27 in article 4.2.1.
-		\subsubsection{Input functions}
-			According to SRS, there are no data sent from the JRI sub-system to the EVC, however we can imagine that some sort of diagnostic/maintenance message may be needed
-		\subsubsection{Output functions}
-			There will be a write\_XXX function for each kind of message. Parameters of the functions must be set accordantly with the 4.2.1 article from subset 27 
+\section{Balise Transmission Module}
+	\subsection{Exchanged data}
+		The BTM sends "message" defined in the subset 26 - §8.4.2 to the EVC. The language used is defined in the subset 26 - §7.
+		
+		Data read from a balise shall also include:
+		\begin{itemize}
+			\item Odometer stamp of the centre of the balise and accuracy
+			\item Time stamp of reception
+			\item Status information
+			\item Failure, alarm
+		\end{itemize}
+		
+	\subsection{Input functions}
+		\begin{itemize}
+			\item read\_btm\_message()
+		\end{itemize}
+	\subsection{Output functions}
+		According to SRS, even if theoretically possible (See subset 26 - §8.4.2.1: Q\_UPDOWN) there are no "message" sent from the EVC to the BTM sub-system.
+		
+\section{Loop Transmission Module}
+	\subsection{Exchanged data}
+			The LTM sends "message" defined in the subset 26 - §8.4.3 to the EVC. The language used is defined in the subset 26 - §7.
+			
+			Data read from a loop shall also include:
 			\begin{itemize}
-				\item write\_GENERAL\_MESSAGE()
-				\item write\_TRAIN\_DATA()
-				\item write\_EMERGENCY\_BRAKE\_COMMAND\_STATE()
-				\item write\_SERVICE\_BRAKE\_COMMAND\_STATE()
-				\item write\_MESSAGE\_TO\_RADIO\_INFILL\_UNIT()
-				\item write\_TELEGRAM\_FROM\_BALISE()
-				\item write\_MESSAGE\_FROM\_EUROLOOP()
-				\item write\_MESSAGE\_FROM\_RADIO\_INFILL\_UNIT()
-				\item write\_MESSAGE\_FROM\_RBC()
-				\item write\_MESSAGE\_TO\_RBC()
-				\item write\_DRIVERS\_ACTIONS()
-				\item write\_BALISE\_GROUP\_ERROR()
-				\item write\_RADIO\_ERROR()
-				\item write\_STM\_INFORMATION()
-				\item write\_INFORMATION\_FROM\_COLD\_MOVEMENT\_DETECTOR()
-				\item write\_START\_DISPLAYING\_FIXED\_TEXT\_MESSAGE()
-				\item write\_STOP\_DISPLAYING\_FIXED\_TEXT\_MESSAGE()
-				\item write\_START\_DISPLAYING\_PLAIN\_TEXT\_MESSAGE()
-				\item write\_STOP\_DISPLAYING\_PLAIN\_TEXT\_MESSAGE()
-				\item write\_SPEED\_AND\_DISTANCE\_MONITORING\_INFORMATION()
-				\item write\_DMI\_SYMBOL\_STATUS()
-				\item write\_DMI\_SOUND\_STATUS()
-				\item write\_DMI\_SYSTEM\_STATUS\_MESSAGE()
-				\item write\_ADDITIONAL\_DATA()
-				\item write\_SR\_SPEED/DISTANCE\_ENTERED\_BY\_THE\_DRIVER()
-				\item write\_NTC\_SELECTED()
-				\item write\_SAFETY\_CRITICAL\_FAULT\_IN\_MODE\_SL,\_NL\_OR\_PS()
-				\item write\_VIRTUAL\_BALISE\_COVER\_SET\_BY\_THE\_DRIVER()
-				\item write\_VIRTUAL\_BALISE\_COVER\_REMOVED\_BY\_THE\_DRIVER()
-				\item write\_SLEEPING\_INPUT()
-				\item write\_PASSIVE\_SHUNTING\_INPUT()
-				\item write\_NON\_LEADING\_INPUT()
-				\item write\_REGENERATIVE\_BRAKE\_STATUS()
-				\item write\_MAGNETIC\_SHOE\_BRAKE\_STATUS()
-				\item write\_EDDY\_CURRENT\_BRAKE\_STATUS()
-				\item write\_ELECTRO\_PNEUMATIC\_BRAKE\_STATUS()
-				\item write\_ADDITIONAL\_BRAKE\_STATUS()
-				\item write\_CAB\_STATUS()
-				\item write\_DIRECTION\_CONTROLLER\_POSITION()
-				\item write\_TRACTION\_STATUS()
-				\item write\_TYPE\_OF\_TRAIN\_DATA()
-				\item write\_NATIONAL\_SYSTEM\_ISOLATION()
-				\item write\_TRACTION\_CUT\_OFF\_COMMAND\_STATE()
-				\item write\_ETCS\_ON-BOARD\_PROPRIETARY\_JURIDICAL\_DATA()
+				\item Time stamp of reception
+				\item Status information
+				\item Failure, alarm
 			\end{itemize}
+		\subsection{Input functions}
+			\begin{itemize}
+				\item read\_ltm\_message()
+			\end{itemize}
+		\subsection{Output functions}
+			According to SRS, even if theoretically possible (See subset 26 - §8.4.3.1: Q\_UPDOWN) there are no "message" sent from the EVC to the LTM sub-system.
+			
+			However, Packet 134 as defined in subset 26 - §7.4.2.30 can contain a "Q\_SSCODE" variable that need to be sent back once read to the device to configure the Spread Spectrum Code for Euroloop as defined in subset 26 §7.5.1.133.
+			
+			\begin{itemize}
+				\item write\_ltm\_sscode()
+			\end{itemize}
+			
+\section{EURORADIO module}
+	\subsection{Exchanged data}
+		The EURORADIO module communicate with the EVC trough "message" defined in the subset 26 - §8.4.4, §8.5, §8.6, §8.7. The language used is defined in the subset 26 - §7.
+		
+		Low level function to manage radio network, safe connection and exchange of message (as defined in subset 37 - §7) shall also be included.
+		
+		\subsubsection{Safe connection}
+			\begin{itemize}
+				\item Sa-CONNECT request
+				\item Sa-CONNECT indication
+				\item Sa-CONNECT response
+				\item Sa-CONNECT confirmation
+			\end{itemize}
+		
+		\subsubsection{Data transfer}
+			\begin{itemize}
+				\item Sa-DATA request
+				\item Sa-DATA indication
+			\end{itemize}
+		
+		\subsubsection{Safe disconnection}
+			\begin{itemize}
+				\item Sa-DISCONNECT request
+				\item Sa-DISCONNECT indication
+			\end{itemize}
+		
+		\subsubsection{Reporting}
+			\begin{itemize}
+				\item Sa-REPORT indication				
+			\end{itemize}
+					
+		\subsubsection{Train to track}
+			\begin{itemize}
+				\item Validated Train Data
+				\item Request for Shunting
+				\item MA Request
+				\item Train Position Report
+				\item Request to shorten MA is granted
+				\item Request to shorten MA is rejected
+				\item Acknowledgment
+				\item Acknowledgment of Emergency Stop
+				\item Track Ahead Free Granted
+				\item End of Mission
+				\item Radio infill request
+				\item No compatible version supported
+				\item Initiation of a communication session
+				\item Termination of a communication session
+				\item SoM Position Report
+				\item Text message acknowledged by driver
+				\item Session Established
+			\end{itemize}
+			
+		\subsubsection{Track to train}
+			\begin{itemize}
+				\item SR Authorization
+				\item Movement Authority
+				\item Recognition of exit from TRIP mode
+				\item Acknowledgment of Train Data
+				\item Request to Shorten MA
+				\item Conditional Emergency Stop
+				\item Unconditional Emergency Stop
+				\item Revocation of Emergency Stop
+				\item General message
+				\item SH Refused
+				\item SH Authorized
+				\item MA with Shifted Location Reference
+				\item Track Ahead Free Request
+				\item Infill MA
+				\item Train Rejected
+				\item RBC/RIU System Version
+				\item Initiation of a communication session
+				\item Acknowledgment of termination of a communication session
+				\item Train Accepted
+				\item SoM position report confirmed by RBC
+				\item Assignment of coordinate system				
+			\end{itemize}
+	
+	\subsection{Input functions}
+		\begin{itemize}
+			\item read\_radio\_message()
+		\end{itemize}
+	\subsection{Output functions}
+		\begin{itemize}
+			\item write\_radio\_message()
+		\end{itemize}
+		
+\section{Specific Transmission Module}
+	\subsection{Exchanged data}
+		Messages exchanged with the National Systems are described in subset 35 - §5 and subset 58.
+		
+		Read only data:
+		\begin{itemize}
+			\item Juridical data
+				\subitem subset 35 - §5.2.6
+		\end{itemize}
+		
+		Write only data:
+		\begin{itemize}
+			\item Reference time
+				\subitem subset 35 - §5.2.2
+			\item Odometer data
+				\subitem subset 35 - §5.2.3 / §12
+		\end{itemize}
+		
+		Read/Write data:
+		\begin{itemize}
+			\item Train Interface
+				\subitem subset 35 - §5.2.4
+			\item Brake Interface
+				\subitem subset 35 - §5.2.5
+			\item STM Control
+				\subitem subset 35 - §5.2.7
+			\item DMI
+				\subitem subset 35 - §5.2.8
+				
+		\end{itemize}
+		
+	\subsection{Input functions}
+		\begin{itemize}
+			\item read\_stm\_message()
+		\end{itemize}
+	\subsection{Output functions}
+		\begin{itemize}
+			\item write\_stm\_message()
+		\end{itemize}
+		
+\section{DMI}
 
-
-
-
-
-
+\section{Juridical Recording Information}
+	\subsection{Exchanged data}
+		The communication to this sub-system is unidirectional: EVC sends "message" to the JRI sub-systems as defined in subset 27 in article 4.2.1.
+		
+		Data sent to the On-board recording device shall include:
+		\begin{itemize}
+			\item General message
+			\item Train data 
+			\item Emergency brake command state
+			\item Service brake command state
+			\item Message to radio infill unit
+			\item Telegram from balise
+			\item Message from euroloop 
+			\item Message from radio infill unit
+			\item Message from RBC
+			\item Message to RBC
+			\item Driver’s actions
+			\item Balise group error
+			\item Radio error
+			\item STM information
+			\item Information from cold movement detector
+			\item Start displaying fixed text message 
+			\item Stop displaying fixed text message 
+			\item Start displaying plain text message 
+			\item Stop displaying plain text message 
+			\item Speed and distance monitoring information 
+			\item DMI symbol status
+			\item DMI sound status
+			\item DMI system status message
+			\item Additional data
+			\item SR speed/distance entered by the driver
+			\item NTC selected
+			\item Safety critical fault in mode SL, NL or PS
+			\item Virtual balise cover set by the driver
+			\item Virtual balise cover removed by the driver
+			\item Sleeping input
+			\item Passive shunting input
+			\item Non leading input
+			\item Regenerative brake status
+			\item Magnetic shoe brake status
+			\item Eddy current brake status
+			\item Electro pneumatic brake status
+			\item Additional brake status
+			\item Cab status
+			\item Direction controller position
+			\item Traction status
+			\item Type of train data
+			\item National system isolation
+			\item Traction cut off command state
+			\item ETCS ON-Board proprietary juridical data
+		\end{itemize}
+		
+	\subsection{Input functions}
+		According to SRS, there are no data sent from the JRI sub-system to the EVC.
+	\subsection{Output functions}
+		\begin{itemize}
+			\item write\_jri\_message()
+		\end{itemize}
 
 %===================================================
 %Do NOT change anything below this line
