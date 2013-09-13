@@ -84,7 +84,11 @@ This document will describe the external interface between the baseline 3 implem
 
 As the kernel is a strict subset 26 implementation, this document will not cover specific proprietary components such as Odometer, Train Interface Unit, Balise Transmission Module, Loop Transmission Module, Specific Transmission Module, EURORADIO or Juridical recording unit.
 
-The document will be spitted across modules 
+Each section of the document will describe the interface between the EVC and one sub-system, scoping what have to be implemented in the EVC to allow a third-party sub-system software to talk to the EVC from ERSA.
+
+Typically, the test environment will have to emulate the different subsystem 
+
+This is a preliminary work, so the final implementation may be different. 
 
 \section{Maintenance}
 	\subsection{Exchanged data}
@@ -351,31 +355,46 @@ The document will be spitted across modules
 	\subsection{Exchanged data}
 		Messages exchanged with the National Systems are described in subset 35 - §5 and subset 58.
 		
-		Read only data:
+		The EVC shall read:
 		\begin{itemize}
 			\item Juridical data
 				\subitem subset 35 - §5.2.6
-		\end{itemize}
-		
-		Write only data:
-		\begin{itemize}
-			\item Reference time
-				\subitem subset 35 - §5.2.2
-			\item Odometer data
-				\subitem subset 35 - §5.2.3 / §12
-		\end{itemize}
-		
-		Read/Write data:
-		\begin{itemize}
-			\item Train Interface
+			\item Train status
 				\subitem subset 35 - §5.2.4
-			\item Brake Interface
+			\item Brake status
 				\subitem subset 35 - §5.2.5
 			\item STM Control
 				\subitem subset 35 - §5.2.7
 			\item DMI
 				\subitem subset 35 - §5.2.8
-				
+		\end{itemize}
+		
+		The EVC shall write:
+		\begin{itemize}
+			\item Reference time
+				\subitem subset 35 - §5.2.2
+			\item Odometer data
+				\subitem subset 35 - §5.2.3 / §12
+			\item Train command
+				\subitem subset 35 - §5.2.4
+			\item Brake command
+				\subitem subset 35 - §5.2.5
+			\item STM Control
+				\subitem subset 35 - §5.2.7
+			\item DMI
+				\subitem subset 35 - §5.2.8
+		\end{itemize}
+		
+		The EVC shall read/write:
+		\begin{itemize}
+			\item Train status
+				\subitem subset 35 - §5.2.4
+			\item Brake interface
+				\subitem subset 35 - §5.2.5
+			\item STM Control
+				\subitem subset 35 - §5.2.7
+			\item DMI
+				\subitem subset 35 - §5.2.8				
 		\end{itemize}
 		
 	\subsection{Input functions}
@@ -388,6 +407,55 @@ The document will be spitted across modules
 		\end{itemize}
 		
 \section{DMI}
+	\subsection{Exchanged data}
+		The EVC shall read:
+		\begin{itemize}
+			\item Activity status of the DMI
+			\item Driver Request or Acknowledgement (other than text)
+			\item Text Message Acknowledgment
+			\item Train Data Acknowledgment (Validation)
+			\item Version information of the DMI
+			\item Icon Acknowledgment 
+			\item Indication of audible information on DMI
+			\item Set Virtual Balise Cover
+			\item Remove Virtual Balise Cover
+			\item Entered radio network
+			\item VBC data (set) acknowledgement
+			\item VBC data (remove) acknowledgement
+			\item Output information related to NTC
+		\end{itemize}
+			
+		The EVC shall write:
+		\begin{itemize}
+			\item Dynamic Data, like current train speed, target data…
+			\item Request to enable/disable driver menus and buttons
+			\item Request to input certain data (driver id, train data…)
+			\item EVC Coded Train Data to be validated by EVC
+			\item Predefined or Plain Text Message
+			\item Description of track (speed and gradient profile…)
+			\item Request for the DMI version information
+			\item Request to display one or more icon(s) in any area.
+			\item Display the EVC operated system version
+			\item State of DMI display (cabin activation).
+			\item List of available levels.
+			\item List of available radio network
+			\item List of VBCs stored on-board
+			\item Coded VBC data (set) to be validated by driver
+			\item Coded VBC data (remove) to be validated by driver
+			\item Input information related to NTC
+			\item Description of NTC data entry window
+		\end{itemize}
+			
+		The EVC shall read/write:
+		\begin{itemize}
+			\item Default or Entered Driver Identifier
+			\item Default or Entered Train Running Number
+			\item Default or Entered Staff Responsible Data
+			\item Default or Entered Train Data 
+			\item Default or Entered Adhesion Factor Data
+			\item Default or entered ETCS Level
+			\item Defaut or entered RBC contact info (RBC data and radio network ID)
+		\end{itemize}
 
 \section{Juridical Recording Information}
 	\subsection{Exchanged data}
