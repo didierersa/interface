@@ -80,15 +80,13 @@ Version & Section & Modification / Description & Author \\\hline}
 %=============================
 \section{Introduction}
 
-This document will describe the external interface between the baseline 3 implementation of an EVC provided by ERSA and the On-Board sub-systems proprietary interface.
+This document describes the external interface between the baseline 3 implementation of an EVC provided by ERSA and the other On-Board peripherals.
 
 As the kernel is a strict subset 26 implementation, this document will not cover specific proprietary components such as Odometer, Train Interface Unit, Balise Transmission Module, Loop Transmission Module, Specific Transmission Module, EURORADIO or Juridical recording unit.
 
-Each section of the document will describe the interface between the EVC and one sub-system, scoping what have to be implemented in the EVC to allow a third-party sub-system software to talk to the EVC from ERSA.
+Each section of the document describes the interface between the EVC and one sub-system.
 
-Typically, the test environment will have to emulate the different subsystem 
-
-This is a preliminary work, so the final implementation may be different. 
+This is a preliminary work, so this document may need to be completed during the course of the project. 
 
 \section{Maintenance}
 	\subsection{Exchanged data}
@@ -96,12 +94,12 @@ This is a preliminary work, so the final implementation may be different.
 	\subsection{Input functions}
 		\begin{itemize}
 			\item read\_xxx\_status()
-				\subitem "xxx" can be "tui", "btm", "dmi", ...
+				\subitem "xxx" can be "tiu", "btm", "dmi", ...
 		\end{itemize}
 	\subsection{output functions}
 		\begin{itemize}
 			\item write\_xxx\_maintenance\_data()
-				\subitem "xxx" can be "tui", "btm", "dmi", ...
+				\subitem "xxx" can be "tiu", "btm", "dmi", ...
 		\end{itemize}
 \section{Odometer}
 	\subsection{Exchanged data}
@@ -165,62 +163,62 @@ This is a preliminary work, so the final implementation may be different.
 			\item Pantograph command
 			\item Air Tightness command
 			\item Main Power Switch command
-			\item Isolation 
-			\item Passenger door
+			\item Isolation status
+			\item Station platform positions
 			\item Allowed current consumption				
 		\end{itemize}						
 	\subsection{Input functions}
 		\begin{itemize}
-			\item read\_tui\_sleeping()
+			\item read\_tiu\_sleeping()
 				\subitem subset 34 - §2.2.1, subset 26 - §4.4.6 / §4.6.3
-			\item read\_tui\_passive\_shunting()
+			\item read\_tiu\_passive\_shunting()
 				\subitem subset 34 - §2.2.2, subset 26 - §4.4.20 / §4.6.3
-			\item read\_tui\_non-leading()
+			\item read\_tiu\_non-leading()
 				\subitem subset 34 - §2.2.3, subset 26 - §4.4.15 / §4.6.3
-			\item read\_bui\_brake\_pressure()
+			\item read\_biu\_brake\_pressure()
 				\subitem subset 34 - §2.3.2, subset 26 - §3.13.2.2.7 / §a.3.10
-			\item read\_bui\_special\_brake\_status()
+			\item read\_biu\_special\_brake\_status()
 				\subitem subset 34 - §2.3.6, subset 26 - §3.13
-			\item read\_bui\_additional\_brake\_status()
+			\item read\_biu\_additional\_brake\_status()
 				\subitem subset 34 - §2.3.7, subset 26 - §3.13
-			\item read\_tui\_cab\_status()
+			\item read\_tiu\_cab\_status()
 				\subitem subset 34 - §2.5.1, subset 26 - §4.6.3, subset 35 - §5.2.4.4
-			\item read\_tui\_direction\_controller()
+			\item read\_tiu\_direction\_controller()
 				\subitem subset 34 - §2.5.2, subset 26 - §3.14.2 / 5.13.1.4, subset 35 - §5.2.4.4
-			\item read\_tui\_train\_integrity()
+			\item read\_tiu\_train\_integrity()
 				\subitem subset 34 - §2.5.3, subset 26 - §3.6.5.2.1
-			\item read\_tui\_train\_data\_information()
+			\item read\_tiu\_train\_data\_information()
 				\subitem subset 34 - §2.6.2, subset 26 - §3.18.3 / §5.17
-			\item read\_tui\_type\_of\_train\_data\_entry()
+			\item read\_tiu\_type\_of\_train\_data\_entry()
 				\subitem subset 34 - §2.6.1, era\_ertms\_015560 - §10.3.9.6
-			\item read\_tui\_traction\_status()
+			\item read\_tiu\_traction\_status()
 				\subitem subset 34 - §2.5.4, subset 35 - §5.2.4.4
-			\item read\_tui\_national\_system\_isolation()
+			\item read\_tiu\_national\_system\_isolation()
 				\subitem subset 34 - §2.7, subset 35 - §10.3.3.5 / §10.3.3.6 / §10.14.1.2
 		\end{itemize}
 	\subsection{Output functions}
 		\begin{itemize}
-			\item write\_tui\_isolation()
+			\item write\_tiu\_isolation()
 				\subitem subset 34 - §2.2.4, subset 26 - §4.4.3.1.1
-			\item write\_bui\_service\_brake\_command()
+			\item write\_biu\_service\_brake\_command()
 				\subitem subset 34 - §2.3.1, subset 26 - §3.13.2.2.7, subset 35 - §5.2.5
-			\item write\_bui\_emergency\_brake\_command()
+			\item write\_biu\_emergency\_brake\_command()
 				\subitem subset 34 - §2.3.3, subset 26 - §3.13.10 / §3.14.1 / §4.4.4 / §4.4.5 / §4.4.13, subset 35 - §5.2.5
-			\item write\_bui\_special\_brake\_inhibit()
+			\item write\_biu\_special\_brake\_inhibit()
 				\subitem subset 34 - §2.3.4, subset 26 - §3.12.1, subset 35 - §5.2.4.3, subset 35 - §5.2.4.3
-			\item write\_tui\_change of\_traction\_system()
+			\item write\_tiu\_change of\_traction\_system()
 				\subitem subset 34 - §2.4.1, subset 26 - §3.12.1
-			\item write\_tui\_pantograph()
+			\item write\_tiu\_pantograph()
 				\subitem subset 34 - §2.4.2, subset 26 - §3.12.1, subset 35 - §5.2.4.3
-			\item write\_tui\_air\_tightness()
+			\item write\_tiu\_air\_tightness()
 				\subitem subset 34 - §2.4.4, subset 26 - §3.12.1, subset 35 - §5.2.4.3
-			\item write\_tui\_passenger\_door()
+			\item write\_tiu\_passenger\_door()
 				\subitem subset 34 - §2.4.6, subset 26 - §3.12.1
-			\item write\_tui\_main\_power\_switch()
+			\item write\_tiu\_main\_power\_switch()
 				\subitem subset 34 - §2.4.7, subset 26 - §3.12.1, subset 35 - §5.2.4.3
-			\item write\_tui\_traction\_cut\_off()
+			\item write\_tiu\_traction\_cut\_off()
 				\subitem subset 34 - §2.4.9, subset 26 - §3.13.2.2.8, subset 35 - §5.2.4.3
-			\item write\_tui\_change\_of\_allowed\_current\_consumption()
+			\item write\_tiu\_change\_of\_allowed\_current\_consumption()
 				\subitem subset 34 - §2.4.10, subset 26 - §3.12.1		
 		\end{itemize}
 \section{Balise Transmission Module}
